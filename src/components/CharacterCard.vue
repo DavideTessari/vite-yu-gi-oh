@@ -1,34 +1,31 @@
 <script>
 export default {
-    name: 'CharacterCard',
-    props: {
-        characterInfo: Object
-    }
-}
+  name: 'CharacterCard',
+  props: {
+    data: Object // Cambia il tipo di prop a Object anziché Array
+  }
+};
 </script>
 
 <template>
     <div class="character-card">
         <div class="image">
-            <img :src="characterInfo.image" :alt="characterInfo.name">
-        </div>
-
-        <h2>{{ characterInfo.name }}</h2>
-        <div>{{ characterInfo.status }}</div>
-        <div>{{ characterInfo.species }}</div>
+        <img :src="data.card_images[0].image_url_small" :alt="data.name" /></div>
+        <h2>{{ data.name }}</h2>
+        <div>{{ data.archetype }}</div>
     </div>
 </template>
 
 <style scoped lang="scss">
 .character-card {
-    width: calc((100% / 5) - 10px);
-    text-align: center;
-    margin: 10px 5px;
+  width: calc((100% / 5) - 10px);
+  text-align: center;
+  margin: 10px 5px;
 
-    .image {
-        img {
-            width: 100%;
-        }
+  .image {
+    img {
+      width: 100%;
     }
+  }
 }
 </style>

@@ -1,9 +1,9 @@
 <script>
 import axios from 'axios';
-import { store } from './store.js';
 import AppHeader from './components/AppHeader.vue';
 import CharactersList from './components/CharactersList.vue';
 import AppLoader from './components/AppLoader.vue';
+import { store } from './store.js';
 
 export default {
   components: {
@@ -17,28 +17,28 @@ export default {
     };
   },
   methods: {
-    getCharactersFromApi() {
-      // Prende i personaggi dall'api e popola lo store
+    getCardFromApi() {
       axios.get('https://db.ygoprodeck.com/api/v7/cardinfo.php?num=20&offset=0')
-      .then((response) => {
-        store.characters = response.data.results;
-        store.isLoading = false;
-      });
-    }
+        .then((response) => {
+          this.store.cards = response.data.data; 
+          this.store.isLoading = false;
+        });
+    },
   },
   mounted() {
-    this.getCharactersFromApi();
+    this.getCardFromApi();
   }
-}
+};
 </script>
 
 <template>
-  <AppHeader></AppHeader>
-
-  <main>
-    <CharactersList v-if="!store.isLoading"></CharactersList>
-    <AppLoader v-else></AppLoader>
-  </main>
+  <div>
+    <AppHeader />
+    <main>
+      <CharactersList v-if="!store.isLoading" />
+      <AppLoader v-else />
+    </main>
+  </div>
 </template>
 
 <style lang="scss">
