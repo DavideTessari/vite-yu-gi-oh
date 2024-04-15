@@ -2,7 +2,7 @@
 export default {
   name: 'CharacterCard',
   props: {
-    data: Object // Cambia il tipo di prop a Object anziché Array
+    data: Object
   }
 };
 </script>
