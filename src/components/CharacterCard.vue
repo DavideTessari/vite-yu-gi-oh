@@ -21,14 +21,13 @@ export default {
 
 <style scoped lang="scss">
 .character-card {
-    width: calc((100% / 4) - 10px);
+    width: calc((100% / 5) - 10px);
     text-align: center;
     margin: 10px 5px;
 
     .image {
         img {
             width: 100%;
-            border-radius: 50%;
         }
     }
 }

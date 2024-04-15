@@ -19,7 +19,7 @@ export default {
   methods: {
     getCharactersFromApi() {
       // Prende i personaggi dall'api e popola lo store
-      axios.get('https://rickandmortyapi.com/api/character')
+      axios.get('https://db.ygoprodeck.com/api/v7/cardinfo.php?num=20&offset=0')
       .then((response) => {
         store.characters = response.data.results;
         store.isLoading = false;
