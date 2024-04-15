@@ -5,7 +5,7 @@ export default {
 </script>
 
 <template>
-pippo
+
 </template>
 
 <style scoped lang="scss">
