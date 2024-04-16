@@ -1,7 +1,9 @@
 <script>
 import axios from 'axios';
-import { store } from '../store.js';
-import CharacterCard from './CharacterCard.vue';
+import AppHeader from './components/AppHeader.vue';
+import CharactersList from './components/CharactersList.vue';
+import AppLoader from './components/AppLoader.vue';
+import { store } from './store.js';
 
 export default {
   name: 'CharactersList',
