@@ -21,10 +21,15 @@ export default {
   },
   methods: {
     getArchetypeFromApi() {
-      axios.get('https://db.ygoprodeck.com/api/v7/archetypes.php')
-        .then(response => {
-          this.archetypes = response.data.data;
-        });
+      let apiUrl = 'https://db.ygoprodeck.com/api/v7/archetypes.php'
+      const queryParams = {};
+
+      if(store.searchedArchetype !== '') {
+      queryParams.name = store.searchedArchetype;
+      }
+      axios.get(apiUrl, {
+        params: queryParams
+      })
     },
     getCardFromApi() {
       axios.get('https://db.ygoprodeck.com/api/v7/cardinfo.php?num=20&offset=0')
