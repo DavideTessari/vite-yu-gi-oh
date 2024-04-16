@@ -1,46 +1,90 @@
 <script>
 import axios from 'axios';
-import AppHeader from './components/AppHeader.vue';
-import CharactersList from './components/CharactersList.vue';
-import AppLoader from './components/AppLoader.vue';
-import { store } from './store.js';
+import { store } from '../store.js';
+import CharacterCard from './CharacterCard.vue';
 
 export default {
+  name: 'CharactersList',
   components: {
-    AppHeader,
-    CharactersList,
-    AppLoader
+    CharacterCard
   },
   data() {
     return {
-      store
+      store,
+      archetypes: [],
+      selectedArchetype: '',
     };
   },
+  computed: {
+    filteredCards() {
+      // Filtra le carte in base all'archetipo selezionato
+      if (!this.selectedArchetype) {
+        return this.store.cards;
+      } else {
+        return this.store.cards.filter(card => card.archetype === this.selectedArchetype);
+      }
+    }
+  },
   methods: {
-    getCardFromApi() {
-      axios.get('https://db.ygoprodeck.com/api/v7/cardinfo.php?num=20&offset=0')
-        .then((response) => {
-          this.store.cards = response.data.data; 
-          this.store.isLoading = false;
+    fetchArchetypes() {
+      // Ottieni la lista degli archetipi dall'API
+      axios.get('https://db.ygoprodeck.com/api/v7/archetypes.php')
+        .then(response => {
+          this.archetypes = response.data.data;
         });
     },
+    filterByArchetype() {
+      // Chiamata API per filtrare le carte per archetipo selezionato
+      if (this.selectedArchetype) {
+        axios.get(`https://db.ygoprodeck.com/api/v7/cardinfo.php?archetype=${this.selectedArchetype}&num=20&offset=0`)
+          .then(response => {
+            this.store.cards = response.data.data;
+          });
+      } else {
+        // Se non è selezionato un archetipo, ripristina tutte le carte
+        this.getCardFromApi();
+      }
+    },
+    getCardFromApi() {
+      axios.get('https://db.ygoprodeck.com/api/v7/cardinfo.php?num=20&offset=0')
+        .then(response => {
+          this.store.cards = response.data.data;
+          this.store.isLoading = false;
+        });
+    }
   },
   mounted() {
-    this.getCardFromApi();
+    this.fetchArchetypes();
+    this.getCardFromApi(); 
   }
 };
 </script>
 
 <template>
-  <div>
-    <AppHeader />
-    <main>
-      <CharactersList v-if="!store.isLoading" />
-      <AppLoader v-else />
-    </main>
-  </div>
+  <section class="characters-list">
+    <div class="filter-container">
+      <label for="archetypeSelect">Filtra per Archetipo:</label>
+      <select id="archetypeSelect" v-model="selectedArchetype" @change="filterByArchetype">
+        <option value="">Tutti gli Archetipi</option>
+        <option v-for="archetype in archetypes" :key="archetype" :value="archetype">{{ archetype }}</option>
+      </select>
+    </div>
+    <div class="container">
+      <div class="characters-cards">
+        <CharacterCard v-for="card in filteredCards" :key="card.id" :data="card" />
+      </div>
+    </div>
+  </section>
 </template>
 
-<style lang="scss">
-@use './style/generic';
+<style scoped lang="scss">
+.characters-list {
+  .filter-container {
+    margin-bottom: 20px;
+  }
+  .characters-cards {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
 </style>
